@@ -37,12 +37,14 @@
     shellAliases = {
       cls = "clear";
       ls = "eza --icons";
-      rebuild = "sudo nixos-rebuild switch";
+      rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#msolinsk";
+      # Update all your packages to the latest rolling release
+      nixupdate = "nix flake update /etc/nixos && rebuild";
       nixconf = "sudo ZED_ALLOW_ROOT=true zeditor /etc/nixos/";
     };
   };
 
   users.defaultUserShell = pkgs.zsh;
 
-  security.pki.certificateFiles = [ ./rootCA.crt ];
+  security.pki.certificateFiles = [ "/etc/nixos/rootCA.crt" ];
 }
