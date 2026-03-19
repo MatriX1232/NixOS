@@ -9,42 +9,13 @@
       "wheel"
       "video"
     ];
+    shell = pkgs.zsh;
   };
 
-  # programs.bash.shellAliases = {
-  #   zed = "zeditor";
-  #   nixconf = "sudo ZED_ALLOW_ROOT=true zeditor /etc/nixos/";
-  #   rebuild = "sudo nixos-rebuild switch";
-  #   checkgpu = "nvidia-smi";
-  # };
-
-  programs.zsh = {
-    enable = true;
-    enableCompletion = true;
-    autosuggestions.enable = true;
-    syntaxHighlighting.enable = true;
-
-    ohMyZsh = {
-      enable = true;
-      plugins = [
-        "git"
-        "zsh-autosuggestions"
-        "zsh-syntax-highlighting"
-      ];
-      theme = "half-life";
-    };
-
-    shellAliases = {
-      cls = "clear";
-      ls = "eza --icons";
-      rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#msolinsk";
-      # Update all your packages to the latest rolling release
-      nixupdate = "nix flake update /etc/nixos && rebuild";
-      nixconf = "sudo ZED_ALLOW_ROOT=true zeditor /etc/nixos/";
-    };
-  };
-
+  # This tells NixOS to install Zsh infrastructure system-wide
+  programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
+  users.users.root.shell = pkgs.zsh;
 
   security.pki.certificateFiles = [ ./rootCA.crt ];
 }

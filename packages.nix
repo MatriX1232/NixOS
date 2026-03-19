@@ -29,11 +29,7 @@
     intel-gpu-tools
 
     # Other
-    jetbrains-mono
     eza
-    easyeffects
-    spotify
-    gparted-full
   ];
 
   programs.firefox = {
