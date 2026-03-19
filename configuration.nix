@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 
 {
   imports = [
@@ -7,6 +12,7 @@
     ./asus.nix
     ./packages.nix
     ./users.nix
+    ./storage.nix
   ];
 
   # Bootloader
