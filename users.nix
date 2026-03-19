@@ -46,5 +46,5 @@
 
   users.defaultUserShell = pkgs.zsh;
 
-  security.pki.certificateFiles = [ "/etc/nixos/rootCA.crt" ];
+  security.pki.certificateFiles = [ "./rootCA.crt" ];
 }
