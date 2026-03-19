@@ -24,7 +24,6 @@
   i18n.extraLocaleSettings = {
     LC_ADDRESS = "pl_PL.UTF-8";
     LC_TIME = "pl_PL.UTF-8";
-    # ... (rest of your PL locales if you want them)
   };
 
   # Desktop Environment
@@ -38,7 +37,7 @@
     extraGSettingsOverridePackages = [ pkgs.mutter ];
     extraGSettingsOverrides = ''
       [org.gnome.mutter]
-      experimental-features=['scale-monitor-framebuffer', 'variable-refresh-rate']
+      experimental-features=['scale-monitor-framebuffer', 'variable-refresh-rate', 'xwayland-native-scaling']
     '';
   };
   services.xserver.xkb = {
@@ -52,6 +51,27 @@
     enable = true;
     alsa.enable = true;
     pulse.enable = true;
+  };
+
+  fonts = {
+    packages = with pkgs; [
+      jetbrains-mono
+      noto-fonts
+      noto-fonts-cjk-sans
+      noto-fonts-color-emoji
+      font-awesome
+    ];
+    fontconfig = {
+      antialias = true;
+      subpixel = {
+        rgba = "rgb";
+        lcdfilter = "default";
+      };
+      hinting = {
+        enable = true;
+        style = "slight"; # 'slight' is best for high-DPI screens like G16
+      };
+    };
   };
 
   # Modern Nix Features

@@ -7,6 +7,7 @@
     nil
     nixpkgs-fmt
     direnv # Essential for "mobile dev" (per-project environments)
+    nix-tree
     nix-direnv
     git
     gh
@@ -25,6 +26,7 @@
     supergfxctl
     nvtopPackages.full
     btop
+    intel-gpu-tools
 
     # Other
     jetbrains-mono
@@ -47,5 +49,18 @@
     # remotePlay.openFirewall = true;
     # dedicatedServer.openFirewall = true;
     localNetworkGameTransfers.openFirewall = true;
+    # extraArgs = "-forcedesktopscaling 1.25";
+  };
+
+  environment.variables = {
+    # 1. Force Electron/Chromium apps to use Wayland
+    NIXOS_OZONE_WL = "1";
+
+    # 2. Tell Zed to specifically use Wayland
+    ZED_WAYLAND = "1";
+
+    # 3. Help with blurriness in some GTK apps
+    GDK_BACKEND = "wayland,x11";
+    QT_QPA_PLATFORM = "wayland;xcb";
   };
 }
