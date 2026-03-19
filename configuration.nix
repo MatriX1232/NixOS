@@ -30,8 +30,21 @@
   # Desktop Environment
   services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-  services.xserver.xkb = { layout = "pl"; variant = ""; };
+  services.xserver.displayManager.gdm.wayland = true;
+  services.xserver.desktopManager.gnome = {
+    enable = true;
+
+    # experimental unless GNOME 50
+    extraGSettingsOverridePackages = [ pkgs.mutter ];
+    extraGSettingsOverrides = ''
+      [org.gnome.mutter]
+      experimental-features=['scale-monitor-framebuffer', 'variable-refresh-rate']
+    '';
+  };
+  services.xserver.xkb = {
+    layout = "pl";
+    variant = "";
+  };
   console.keyMap = "pl2";
 
   # Sound
@@ -42,7 +55,10 @@
   };
 
   # Modern Nix Features
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
+  nix.settings.experimental-features = [
+    "nix-command"
+    "flakes"
+  ];
 
   system.stateVersion = "25.11";
 }
