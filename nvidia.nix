@@ -7,8 +7,8 @@
     enable = true;
     enable32Bit = true;
     extraPackages = with pkgs; [
-      intel-media-driver # For the i7-13620H iGPU
-      nvidia-vaapi-driver # For dGPU acceleration
+      intel-media-driver # i7-13620H iGPU
+      nvidia-vaapi-driver # dGPU acceleration
       intel-compute-runtime # OpenCL for Intel
     ];
   };
@@ -37,7 +37,6 @@
   environment.variables = {
     LIBVA_DRIVER_NAME = "iHD"; # Default to Intel for efficiency
     VDPAU_DRIVER = "va_gl";
-    # Force Wayland for Firefox/Electron
     MOZ_ENABLE_WAYLAND = "1";
     # Force Nvidia to use Wayland-friendly buffers
     GBM_BACKEND = "nvidia-drm";

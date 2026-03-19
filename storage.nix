@@ -13,7 +13,7 @@
     "cifs"
   ];
 
-  # 3. The 710GB Windows Partition (Using the fast ntfs3 driver)
+  # 3. The 710GB Windows Partition
   fileSystems."/mnt/WD_SSD" = {
     device = "/dev/disk/by-uuid/3C00FC4200FC0524";
     fsType = "ntfs3";
@@ -22,14 +22,13 @@
     ];
   };
 
-  # 4. The NAS - Mateusz (Balanced & Responsive)
+  # 4. The NAS - Mateusz
   # Uses systemd automount so it doesn't hang boot.
   fileSystems."/mnt/OrangePI_Mateusz" = {
     device = "//192.168.1.154/Mateusz";
     fsType = "cifs";
     options =
       let
-        # This allows us to reuse the same options if you add more shares later
         automount_opts = "x-systemd.automount,noauto,x-systemd.idle-timeout=60,x-systemd.device-timeout=5s,x-systemd.mount-timeout=5s";
       in
       [

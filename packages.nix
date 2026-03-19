@@ -6,7 +6,7 @@
     zed-editor
     nil
     nixpkgs-fmt
-    direnv # Essential for "mobile dev" (per-project environments)
+    direnv
     nix-tree
     nix-direnv
     git
@@ -15,10 +15,10 @@
     zsh-syntax-highlighting
 
     # Gaming & Graphics
-    protonup-qt # Easy way to install GE-Proton for Steam
-    mangohud # Performance overlay
+    protonup-qt
+    mangohud
     vulkan-tools
-    libva-utils # run 'vainfo' to check acceleration
+    libva-utils
     mesa-demos
 
     # System
@@ -52,10 +52,7 @@
   };
 
   environment.variables = {
-    # 1. Force Electron/Chromium apps to use Wayland
     NIXOS_OZONE_WL = "1";
-
-    # 2. Tell Zed to specifically use Wayland
     ZED_WAYLAND = "1";
 
     # 3. Help with blurriness in some GTK apps

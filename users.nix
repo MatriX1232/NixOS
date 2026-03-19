@@ -12,7 +12,6 @@
     shell = pkgs.zsh;
   };
 
-  # This tells NixOS to install Zsh infrastructure system-wide
   programs.zsh.enable = true;
   users.defaultUserShell = pkgs.zsh;
   users.users.root.shell = pkgs.zsh;

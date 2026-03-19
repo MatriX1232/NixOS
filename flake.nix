@@ -9,6 +9,11 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs"; # Keeps HM in sync with your system pkgs
     };
+
+    spicetify-nix = {
+      url = "github:Gerg-L/spicetify-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -28,7 +33,12 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.users.msolinsk = import ./home.nix;
+            home-manager.users.msolinsk = {
+              imports = [
+                ./home.nix
+                inputs.spicetify-nix.homeManagerModules.default
+              ];
+            };
 
             # This allows Home Manager to see the 'inputs' variable
             home-manager.extraSpecialArgs = { inherit inputs; };

@@ -72,7 +72,7 @@
       };
       hinting = {
         enable = true;
-        style = "slight"; # 'slight' is best for high-DPI screens like G16
+        style = "slight"; # 'slight' is best for high-DPI screens
       };
     };
   };

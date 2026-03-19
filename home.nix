@@ -1,5 +1,13 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  inputs,
+  ...
+}:
 
+let
+  spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.system};
+in
 {
   home.username = "msolinsk";
   home.homeDirectory = "/home/msolinsk";
@@ -15,11 +23,18 @@
   # --- USER PACKAGES --- #
   # Non-System apps (Spotify, etc.)
   home.packages = with pkgs; [
-    spotify
     discord
     easyeffects
     gparted-full
   ];
+
+  programs.spicetify = {
+    enable = true;
+    enabledExtensions = with spicePkgs.extensions; [
+      shuffle
+    ];
+    theme = spicePkgs.themes.bloom;
+  };
 
   # --- ZED EDITOR CONFIGURATION --- #
   programs.zed-editor = {
@@ -35,7 +50,6 @@
       ui_font_size = 16;
       buffer_font_size = 14;
       buffer_font_family = "JetBrains Mono";
-      # Auto-format Nix files using the tools we installed earlier
       format_on_save = "on";
       languages = {
         Nix = {
@@ -68,7 +82,7 @@
       ls = "eza --icons";
       rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#msolinsk";
       nixupdate = "nix flake update /etc/nixos && rebuild";
-      nixconf = "zeditor /etc/nixos/";
+      nixconf = "sudo ZED_ALLOW_ROOT=true zeditor /etc/nixos/";
     };
   };
 }
