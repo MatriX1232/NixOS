@@ -20,6 +20,12 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-x86_64-v3;
 
+  services.scx = {
+    enable = true;
+    scheduler = "scx_bpfland";
+    extraArgs = [ "-m all" ]; # Pass arguments to the scheduler, e.g., using scx_bpfland
+  };
+
   nix.settings = {
     substituters = [
       "https://attic.xuyh0120.win/lantian"
