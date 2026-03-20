@@ -42,21 +42,39 @@
     eza
     fastfetch
     gparted-full
+    aonsoku
+    jellyfin-desktop
+    bitwarden-desktop
   ];
+
+  programs.rog-control-center.enable = true;
+  programs.gamemode.enable = true;
+  programs.gamescope.enable = true;
 
   programs.firefox = {
     enable = true;
     preferences = {
-      "media.ffmpeg.vaapi.enable" = true;
+      # Basic VA-API
+      "media.ffmpeg.vaapi.enabled" = true;
       "media.rdd-ffmpeg.enabled" = true;
-      "widget.wayland.fractional-scale-enabled" = true; # Smooth scaling on the G16 screen
+
+      # FORCE Hardware, Disable Software fallbacks
+      "media.hardware-video-decoding.force-enabled" = true;
+      "media.ffvpx.enabled" = false;
+
+      # THE KEY FIX: Disable AV1
+      # Your hardware supports it, but the Firefox/Intel handshake often fails.
+      # Disabling this forces YouTube to use VP9, which WILL trigger the Video engine.
+      "media.av1.enabled" = false;
+
+      # Sandbox fix for Intel 12/13th Gen
+      "security.sandbox.content.level" = 2;
+
+      # Wayland Performance
+      "widget.dmabuf.force-enabled" = true;
+      "widget.wayland.fractional-scale-enabled" = true;
     };
   };
-
-  programs.rog-control-center.enable = true;
-
-  programs.gamemode.enable = true;
-  programs.gamescope.enable = true;
 
   programs.steam = {
     enable = true;

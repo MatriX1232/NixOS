@@ -26,6 +26,7 @@ in
     discord
     easyeffects
     gparted-full
+    steam
   ];
 
   programs.spicetify = {
