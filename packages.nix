@@ -55,6 +55,9 @@
 
   programs.rog-control-center.enable = true;
 
+  programs.gamemode.enable = true;
+  programs.gamescope.enable = true;
+
   programs.steam = {
     enable = true;
     # remotePlay.openFirewall = true;
