@@ -30,6 +30,21 @@ in
 
   programs.spicetify = {
     enable = true;
+    # spotifyPackage =
+    #   (pkgs.symlinkJoin {
+    #     name = "spotify";
+    #     paths = [ pkgs.spotify ];
+    #     nativeBuildInputs = [ pkgs.makeWrapper ];
+    #     postBuild = ''
+    #       wrapProgram $out/bin/spotify \
+    #         --add-flags "--ozone-platform-hint=auto" \
+    #         --add-flags "--enable-features=WaylandWindowDecorations"
+    #     '';
+    #   })
+    #   // {
+    #     # Inherit metadata from the original package to satisfy spicetify-nix
+    #     inherit (pkgs.spotify) pname version;
+    #   };
     enabledExtensions = with spicePkgs.extensions; [
       shuffle
     ];

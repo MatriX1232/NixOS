@@ -28,8 +28,18 @@
     btop
     intel-gpu-tools
 
+    # GNOME Extensions
+    gnome-extension-manager
+    gnomeExtensions.blur-my-shell
+    gnomeExtensions.gpu-supergfxctl-switch
+    gnomeExtensions.in-picture
+    gnomeExtensions.perf-switcher-asusctl
+    gnomeExtensions.vitals
+
     # Other
     eza
+    fastfetch
+    gparted-full
   ];
 
   programs.firefox = {

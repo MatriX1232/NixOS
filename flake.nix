@@ -14,6 +14,8 @@
       url = "github:Gerg-L/spicetify-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
   };
 
   outputs =
@@ -21,6 +23,8 @@
       self,
       nixpkgs,
       home-manager,
+      spicetify-nix,
+      cachyos-kernel,
       ...
     }@inputs:
     {
@@ -28,6 +32,11 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./configuration.nix
+
+          {
+            nixpkgs.overlays = [ inputs.cachyos-kernel.overlays.pinned ];
+          }
+
           # Add the Home Manager NixOS module
           home-manager.nixosModules.home-manager
           {
@@ -36,7 +45,7 @@
             home-manager.users.msolinsk = {
               imports = [
                 ./home.nix
-                inputs.spicetify-nix.homeManagerModules.default
+                spicetify-nix.homeManagerModules.default
               ];
             };
 
