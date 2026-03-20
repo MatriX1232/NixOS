@@ -20,6 +20,11 @@
   boot.loader.efi.canTouchEfiVariables = true;
   boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-x86_64-v3;
 
+  boot.kernel.sysctl = {
+    "vm.max_map_count" = 2147483642;
+    "kernel.split_lock_mitigate" = 0;
+  };
+
   services.scx = {
     enable = true;
     scheduler = "scx_bpfland";
