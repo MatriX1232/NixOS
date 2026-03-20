@@ -26,6 +26,8 @@
     extraArgs = [ "-m all" ]; # Pass arguments to the scheduler, e.g., using scx_bpfland
   };
 
+  services.ananicy.enable = true;
+
   nix.settings = {
     substituters = [
       "https://attic.xuyh0120.win/lantian"

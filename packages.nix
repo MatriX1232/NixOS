@@ -27,6 +27,8 @@
     nvtopPackages.full
     btop
     intel-gpu-tools
+    ananicy-rules-cachyos
+    ananicy-cpp
 
     # GNOME Extensions
     gnome-extension-manager
