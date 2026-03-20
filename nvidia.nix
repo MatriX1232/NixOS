@@ -41,5 +41,6 @@
     # Force Nvidia to use Wayland-friendly buffers
     GBM_BACKEND = "nvidia-drm";
     __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    __GL_SHADER_DISK_CACHE_SIZE = "10000000000";
   };
 }

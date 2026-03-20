@@ -33,6 +33,10 @@
 
   services.ananicy.enable = true;
 
+  zramSwap.enable = true;
+  zramSwap.memoryPercent = 50;
+  zramSwap.algorithm = "zstd";
+
   nix.settings = {
     substituters = [
       "https://attic.xuyh0120.win/lantian"
