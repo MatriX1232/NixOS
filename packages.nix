@@ -13,8 +13,15 @@
     gh
     zsh-autosuggestions
     zsh-syntax-highlighting
-    python312
+    # python312
     dotnetCorePackages.sdk_10_0-bin
+    uv
+    docker
+    clang-tools
+
+    # CUDA
+    cudaPackages.cudnn
+    cudaPackages.cuda_nvcc
 
     # Gaming & Graphics
     protonup-qt
