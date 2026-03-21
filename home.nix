@@ -17,11 +17,9 @@ in
   # introduces backwards incompatible changes.
   home.stateVersion = "25.11";
 
-  # Let Home Manager install and manage itself.
   programs.home-manager.enable = true;
 
   # --- USER PACKAGES --- #
-  # Non-System apps (Spotify, etc.)
   home.packages = with pkgs; [
     discord
     easyeffects

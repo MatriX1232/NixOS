@@ -7,7 +7,7 @@
     enable = true;
     enable32Bit = true;
     extraPackages = with pkgs; [
-      intel-media-driver # i7-13620H iGPU
+      intel-media-driver # iGPU
       nvidia-vaapi-driver # dGPU acceleration
       intel-compute-runtime # OpenCL for Intel
     ];

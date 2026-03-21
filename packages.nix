@@ -13,6 +13,8 @@
     gh
     zsh-autosuggestions
     zsh-syntax-highlighting
+    python312
+    dotnetCorePackages.sdk_10_0-bin
 
     # Gaming & Graphics
     protonup-qt
@@ -48,8 +50,17 @@
   ];
 
   programs.rog-control-center.enable = true;
-  programs.gamemode.enable = true;
   programs.gamescope.enable = true;
+
+  programs.gamemode = {
+    enable = true;
+    settings = {
+      custom = {
+        start = "${pkgs.asusctl}/bin/asusctl profile -n Performance";
+        end = "${pkgs.asusctl}/bin/asusctl profile -n Balanced";
+      };
+    };
+  };
 
   programs.firefox = {
     enable = true;
@@ -61,11 +72,6 @@
       # FORCE Hardware, Disable Software fallbacks
       "media.hardware-video-decoding.force-enabled" = true;
       "media.ffvpx.enabled" = false;
-
-      # THE KEY FIX: Disable AV1
-      # Your hardware supports it, but the Firefox/Intel handshake often fails.
-      # Disabling this forces YouTube to use VP9, which WILL trigger the Video engine.
-      "media.av1.enabled" = false;
 
       # Sandbox fix for Intel 12/13th Gen
       "security.sandbox.content.level" = 2;
@@ -91,5 +97,8 @@
     # 3. Help with blurriness in some GTK apps
     GDK_BACKEND = "wayland,x11";
     QT_QPA_PLATFORM = "wayland;xcb";
+
+    PROTON_ENABLE_NVAPI = "1";
+    NV_PRIME_RENDER_OFFLOAD = "1";
   };
 }

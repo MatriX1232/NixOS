@@ -23,12 +23,14 @@
   boot.kernel.sysctl = {
     "vm.max_map_count" = 2147483642;
     "kernel.split_lock_mitigate" = 0;
+    "net.ipv4.tcp_congestion_control" = "bbr";
+    "net.core.default_qdisc" = "cake";
   };
 
   services.scx = {
     enable = true;
     scheduler = "scx_bpfland";
-    extraArgs = [ "-m all" ]; # Pass arguments to the scheduler, e.g., using scx_bpfland
+    extraArgs = [ "-m all" ];
   };
 
   services.ananicy.enable = true;
