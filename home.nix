@@ -58,11 +58,12 @@ in
     extensions = [
       "nix"
       "vscodium-theme-pack"
-      "catppuccin"
+      "C#"
+      "Dockerfile"
     ];
 
     userSettings = {
-      theme = "Ayu Dark";
+      theme = "Dracula";
       ui_font_size = 16;
       buffer_font_size = 14;
       buffer_font_family = "JetBrains Mono";
