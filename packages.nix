@@ -13,11 +13,13 @@
     gh
     zsh-autosuggestions
     zsh-syntax-highlighting
-    # python312
+    python314
     dotnetCorePackages.sdk_10_0-bin
     uv
     docker
     clang-tools
+    ollama-cuda
+    lmstudio
 
     # CUDA
     cudaPackages.cudnn

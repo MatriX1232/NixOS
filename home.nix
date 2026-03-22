@@ -26,6 +26,7 @@ in
     gparted-full
     element-desktop
     steam
+    appflowy
   ];
 
   programs.spicetify = {
