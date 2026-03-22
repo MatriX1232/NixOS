@@ -62,26 +62,43 @@
     integrated-only.configuration = {
       system.nixos.tags = [ "integrated-only" ];
 
-      # Strip NVIDIA from drivers
+      # We allow the NVIDIA driver to exist BUT we don't use it.
+      # This allows 'supergfxd' to manage the power state properly.
       services.xserver.videoDrivers = lib.mkForce [ "modesetting" ];
-      hardware.nvidia.prime.offload.enable = lib.mkForce false;
-      hardware.nvidia.prime.offload.enableOffloadCmd = lib.mkForce false;
 
-      # Blacklist NVIDIA modules to guarantee absolute 0W power draw
-      boot.blacklistedKernelModules = [
-        "nouveau"
-        "nvidia"
-        "nvidia_drm"
-        "nvidia_modeset"
+      # 1. Enable PowerTop Auto-Tune
+      powerManagement.powertop.enable = true;
+
+      # 2. Optimized Kernel Params (Removing the 'force' flags)
+      boot.kernelParams = [
+        "i915.enable_guc=3"
+        "i915.enable_fbc=1"
+        "i915.enable_psr=1"
       ];
 
-      environment.variables = {
-        # HW accel for Intel
-        LIBVA_DRIVER_NAME = lib.mkForce "iHD";
+      # 3. Graceful Power Down
+      # This tells the kernel to put the NVIDIA PCIe devices into auto-sleep
+      services.udev.extraRules = lib.mkForce ''
+        # Power down NVIDIA GPU and Audio components gracefully
+        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{control}="auto"
+      '';
 
-        # Unset NVIDIA-specific Wayland variables so Mutter falls back to Intel naturally
+      environment.variables = {
+        LIBVA_DRIVER_NAME = lib.mkForce "iHD";
         GBM_BACKEND = lib.mkForce null;
         __GLX_VENDOR_LIBRARY_NAME = lib.mkForce null;
+      };
+
+      systemd.services.battery-optimizer = {
+        description = "Optimize for Battery";
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig.Type = "oneshot";
+        script = ''
+          ${pkgs.asusctl}/bin/asusctl profile -n Quiet
+          ${pkgs.power-profiles-daemon}/bin/powerprofilesctl set power-saver
+          # Ensure brightness is at a sane level (40%) to save power
+          ${pkgs.brightnessctl}/bin/brightnessctl s 40%
+        '';
       };
     };
 
