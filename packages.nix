@@ -46,6 +46,7 @@
     intel-gpu-tools
     ananicy-rules-cachyos
     ananicy-cpp
+    tailscale
 
     # GNOME Extensions
     gnome-extension-manager
@@ -62,6 +63,7 @@
     aonsoku
     jellyfin-desktop
     bitwarden-desktop
+    sony-headphones-client
   ];
 
   programs.rog-control-center.enable = true;
