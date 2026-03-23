@@ -62,25 +62,35 @@
     integrated-only.configuration = {
       system.nixos.tags = [ "integrated-only" ];
 
-      # We allow the NVIDIA driver to exist BUT we don't use it.
-      # This allows 'supergfxd' to manage the power state properly.
-      services.xserver.videoDrivers = lib.mkForce [ "modesetting" ];
+      # 1. Back to CachyOS Kernel (Better E-core management)
+      # boot.kernelPackages = lib.mkForce pkgs.cachyosKernels.linuxPackages-cachyos-latest-x86_64-v3;
 
-      # 1. Enable PowerTop Auto-Tune
+      # 2. Use 'scx_rustland' - The most efficient scheduler for Hybrid CPUs
+      services.scx = {
+        enable = lib.mkForce true;
+        scheduler = lib.mkForce "scx_rustland";
+      };
+
+      services.xserver.videoDrivers = lib.mkForce [ "modesetting" ];
+      services.ananicy.enable = lib.mkForce false;
+      services.thermald.enable = true;
       powerManagement.powertop.enable = true;
 
-      # 2. Optimized Kernel Params (Removing the 'force' flags)
+      # 3. Deep Hardware States
       boot.kernelParams = [
         "i915.enable_guc=3"
         "i915.enable_fbc=1"
         "i915.enable_psr=1"
+        "i915.enable_dc=4" # Deepest Display Sleep
+        "intel_pstate=active" # Hardware-managed EPP
+        "pcie_aspm.policy=powersave" # Stable PCIe saving
+        "workqueue.power_efficient=Y" # Force power-efficient workqueues
       ];
 
-      # 3. Graceful Power Down
-      # This tells the kernel to put the NVIDIA PCIe devices into auto-sleep
+      # 4. Physically unbind NVIDIA (The "Zero-Leak" Rule)
+      # This ensures the kernel isn't even looking at the card.
       services.udev.extraRules = lib.mkForce ''
-        # Power down NVIDIA GPU and Audio components gracefully
-        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{control}="auto"
+        ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{remove}="1"
       '';
 
       environment.variables = {
@@ -90,14 +100,23 @@
       };
 
       systemd.services.battery-optimizer = {
-        description = "Optimize for Battery";
+        description = "Deep Battery Optimization";
         wantedBy = [ "multi-user.target" ];
         serviceConfig.Type = "oneshot";
         script = ''
+          # 1. Asus Quiet Mode (Hard-caps CPU TDP to ~15-20W)
           ${pkgs.asusctl}/bin/asusctl profile -n Quiet
+
+          # 2. Power Profiles Daemon to Power Saver
           ${pkgs.power-profiles-daemon}/bin/powerprofilesctl set power-saver
-          # Ensure brightness is at a sane level (40%) to save power
-          ${pkgs.brightnessctl}/bin/brightnessctl s 40%
+
+          # 3. Force Intel Energy Preference to 'power'
+          # This tells the CPU to stay on E-cores as much as possible
+          echo "power" | tee /sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference
+
+          # 4. Turn off Bluetooth and Lights
+          ${pkgs.bluez}/bin/bluetoothctl power off
+          ${pkgs.asusctl}/bin/asusctl -k off
         '';
       };
     };

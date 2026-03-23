@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  self,
+  ...
+}:
 
 {
   environment.systemPackages = with pkgs; [
@@ -20,6 +25,7 @@
     clang-tools
     ollama-cuda
     lmstudio
+    ghostty
 
     # CUDA
     cudaPackages.cudnn

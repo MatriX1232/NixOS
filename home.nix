@@ -15,7 +15,7 @@ in
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
   # introduces backwards incompatible changes.
-  home.stateVersion = "25.11";
+  home.stateVersion = "26.05";
 
   programs.home-manager.enable = true;
 
@@ -78,6 +78,18 @@ in
           };
         };
       };
+    };
+  };
+
+  # --- GHOSTTY CONFIGURATION ---
+  programs.ghostty = {
+    enable = true;
+    settings = {
+      theme = "Dracula+";
+      # font-family = "${theme.fonts.monospace.name}";
+      font-size = 10;
+      window-padding-x = 10;
+      window-padding-y = 10;
     };
   };
 
