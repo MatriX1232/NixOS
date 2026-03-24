@@ -40,6 +40,7 @@
 
     # Gaming & Graphics
     protonup-qt
+    heroic
     mangohud
     vulkan-tools
     libva-utils
