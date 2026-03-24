@@ -31,11 +31,25 @@ in
 
   programs.spicetify = {
     enable = true;
+
+    # This wraps the Spotify binary with your specific X11 flag
+    # spotifyPackage =
+    #   (pkgs.symlinkJoin {
+    #     name = "spotify";
+    #     paths = [ pkgs.spotify ];
+    #     nativeBuildInputs = [ pkgs.makeWrapper ];
+    #     postBuild = ''
+    #       wrapProgram $out/bin/spotify \
+    #         --add-flags "--ozone-platform=x11"
+    #     '';
+    #   })
+    #   // {
+    #     # We must inherit the metadata so spicetify-nix knows what this is
+    #     inherit (pkgs.spotify) pname version;
+    #   };
+
     enabledExtensions = with spicePkgs.extensions; [
       shuffle
-      songStats
-      savePlaylists
-      playNext
     ];
     theme = spicePkgs.themes.bloom;
   };
@@ -102,6 +116,12 @@ in
       rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#msolinsk";
       nixupdate = "nix flake update /etc/nixos && rebuild";
       nixconf = "sudo ZED_ALLOW_ROOT=true zeditor /etc/nixos/";
+
+      # --- TAILSCALE ALIASES ---
+      tsoff = "sudo tailscale down";
+      tson = "sudo tailscale up --exit-node= --accept-routes && tailscale status";
+      tsnode = "sudo tailscale up --exit-node=100.110.227.95 --exit-node-allow-lan-access=true --accept-routes && tailscale status";
+      tsstat = "tailscale status";
     };
   };
 }

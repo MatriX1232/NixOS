@@ -66,6 +66,8 @@
     sony-headphones-client
   ];
 
+  services.tailscale.enable = true;
+
   programs.rog-control-center.enable = true;
   programs.gamescope.enable = true;
 
