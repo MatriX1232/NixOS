@@ -9,7 +9,7 @@
     after = [ "multi-user.target" ];
     serviceConfig = {
       Type = "oneshot";
-      ExecStart = "${pkgs.asusctl}/bin/asusctl -c 80";
+      ExecStart = "${pkgs.asusctl}/bin/asusctl battery limit 80";
     };
     wantedBy = [ "multi-user.target" ];
   };

@@ -11,10 +11,6 @@ in
 {
   home.username = "msolinsk";
   home.homeDirectory = "/home/msolinsk";
-
-  # This value determines the Home Manager release that your configuration is
-  # compatible with. This helps avoid breakage when a new Home Manager release
-  # introduces backwards incompatible changes.
   home.stateVersion = "26.05";
 
   programs.home-manager.enable = true;
@@ -31,23 +27,6 @@ in
 
   programs.spicetify = {
     enable = true;
-
-    # This wraps the Spotify binary with your specific X11 flag
-    # spotifyPackage =
-    #   (pkgs.symlinkJoin {
-    #     name = "spotify";
-    #     paths = [ pkgs.spotify ];
-    #     nativeBuildInputs = [ pkgs.makeWrapper ];
-    #     postBuild = ''
-    #       wrapProgram $out/bin/spotify \
-    #         --add-flags "--ozone-platform=x11"
-    #     '';
-    #   })
-    #   // {
-    #     # We must inherit the metadata so spicetify-nix knows what this is
-    #     inherit (pkgs.spotify) pname version;
-    #   };
-
     enabledExtensions = with spicePkgs.extensions; [
       shuffle
     ];
@@ -88,11 +67,10 @@ in
     enable = true;
     settings = {
       theme = "Dracula+";
-      # font-family = "${theme.fonts.monospace.name}";
       font-size = 10;
       window-padding-x = 10;
       window-padding-y = 10;
-      window-width = 240;
+      window-width = 210;
       window-height = 42;
     };
   };
@@ -119,7 +97,7 @@ in
 
       # --- TAILSCALE ALIASES ---
       tsoff = "sudo tailscale down";
-      tson = "sudo tailscale up --exit-node= --accept-routes && tailscale status";
+      tson = "sudo tailscale up --accept-routes --exit-node= --exit-node-allow-lan-access=true && tailscale status";
       tsnode = "sudo tailscale up --exit-node=100.110.227.95 --exit-node-allow-lan-access=true --accept-routes && tailscale status";
       tsstat = "tailscale status";
     };

@@ -62,10 +62,7 @@
     integrated-only.configuration = {
       system.nixos.tags = [ "integrated-only" ];
 
-      # 1. Back to CachyOS Kernel (Better E-core management)
-      # boot.kernelPackages = lib.mkForce pkgs.cachyosKernels.linuxPackages-cachyos-latest-x86_64-v3;
-
-      # 2. Use 'scx_rustland' - The most efficient scheduler for Hybrid CPUs
+      # 2. Most efficient scheduler for Hybrid CPUs
       services.scx = {
         enable = lib.mkForce true;
         scheduler = lib.mkForce "scx_rustland";

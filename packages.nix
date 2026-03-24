@@ -27,9 +27,16 @@
     lmstudio
     ghostty
 
-    # CUDA
-    cudaPackages.cudnn
-    cudaPackages.cuda_nvcc
+    # --- CUDA DEVELOPMENT TOOLS ---
+    # cudaPackages.cuda_nvcc # CUDA Compiler
+    # cudaPackages.cuda_cudart # CUDA Runtime
+    # cudaPackages.libcublas # Basic Linear Algebra (Required by Torch)
+    # cudaPackages.libcufft # Fast Fourier Transforms
+    # cudaPackages.libcurand # Random Number Generation
+    # cudaPackages.libcusolver # Linear Solvers
+    # cudaPackages.libcusparse # Sparse Matrices
+    # cudaPackages.cudnn # Deep Neural Network Library (Required by Torch/TF)
+    # cudaPackages.tensorrt # High-performance Inference
 
     # Gaming & Graphics
     protonup-qt
@@ -55,6 +62,8 @@
     gnomeExtensions.in-picture
     gnomeExtensions.perf-switcher-asusctl
     gnomeExtensions.vitals
+    gnomeExtensions.just-perfection
+    # gnomeExtensions.power-off-options
 
     # Other
     eza
@@ -103,11 +112,33 @@
 
   programs.steam = {
     enable = true;
-    # remotePlay.openFirewall = true;
-    # dedicatedServer.openFirewall = true;
     localNetworkGameTransfers.openFirewall = true;
     # extraArgs = "-forcedesktopscaling 1.25";
   };
+
+  # programs.nix-ld.enable = true;
+  # programs.nix-ld.libraries = with pkgs; [
+  #   stdenv.cc.cc
+  #   zlib
+  #   fuse3
+  #   icu
+  #   nss
+  #   openssl
+  #   curl
+  #   expat
+
+  #   # CUDA libraries for nix-ld to expose to Python
+  #   cudaPackages.cuda_cudart
+  #   cudaPackages.libcublas
+  #   cudaPackages.libcufft
+  #   cudaPackages.libcurand
+  #   cudaPackages.libcusolver
+  #   cudaPackages.libcusparse
+  #   cudaPackages.cudnn
+  #   linuxPackages.nvidia_x11
+  #   libGL
+  #   glib
+  # ];
 
   environment.variables = {
     NIXOS_OZONE_WL = "1";

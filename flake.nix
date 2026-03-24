@@ -15,6 +15,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.4.2";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
   };
 
@@ -25,6 +30,7 @@
       home-manager,
       spicetify-nix,
       cachyos-kernel,
+      lanzaboote,
       ...
     }@inputs:
     {
@@ -32,6 +38,7 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./configuration.nix
+          lanzaboote.nixosModules.lanzaboote
 
           {
             nixpkgs.overlays = [ inputs.cachyos-kernel.overlays.pinned ];

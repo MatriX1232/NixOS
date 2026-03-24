@@ -13,6 +13,7 @@
     ./packages.nix
     ./users.nix
     ./storage.nix
+    ./security.nix
   ];
 
   # Bootloader
@@ -28,13 +29,21 @@
     "net.core.default_qdisc" = "cake";
   };
 
+  # Lanzaboote prep
+  boot.bootspec.enable = true;
+  boot.lanzaboote.enable = false;
+
   services.scx = {
     enable = true;
     scheduler = "scx_bpfland";
     extraArgs = [ "-m all" ];
   };
 
-  services.ananicy.enable = true;
+  services.ananicy = {
+    enable = true;
+    package = pkgs.ananicy-cpp;
+    rulesProvider = pkgs.ananicy-rules-cachyos;
+  };
 
   zramSwap.enable = true;
   zramSwap.memoryPercent = 50;
