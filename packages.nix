@@ -55,6 +55,7 @@
     ananicy-rules-cachyos
     ananicy-cpp
     tailscale
+    pciutils
 
     # GNOME Extensions
     gnome-extension-manager

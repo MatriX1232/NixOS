@@ -19,10 +19,11 @@
   # PREP FOR FRESH INSTALL:
   boot.initrd.systemd.enable = true;
   boot.initrd.kernelModules = [ "tpm_tis" ];
-  boot.initrd.luks.devices."root" = {
+  boot.initrd.luks.devices."luks-788ea0fc-dc0b-435f-a061-0d4e725e07d5" = {
     device = "/dev/disk/by-uuid/788ea0fc-dc0b-435f-a061-0d4e725e07d5";
     preLVM = true;
-    allowDiscards = true; # Needed for SSD TRIM performance
+    allowDiscards = true;
+    # Needed for SSD TRIM performance
     crypttabExtraOpts = [ "tpm2-device=auto" ];
   };
 
@@ -63,7 +64,7 @@
   };
 
   # DNS-over-TLS + PiHole Integration
-  networking.nameservers = [ "192.168.1.154" ]; # PiHole first
+  # networking.nameservers = [ "192.168.1.154" ]; # PiHole first
 
   services.resolved = {
     enable = true;
@@ -98,7 +99,6 @@
   # Sudo security
   security.sudo.execWheelOnly = true; # Only 'wheel' group can use sudo
   security.sudo.extraConfig = ''
-    Defaults lecture = always
     Defaults passwd_timeout=0
   '';
 }

@@ -30,8 +30,8 @@
   };
 
   # Lanzaboote prep
-  boot.bootspec.enable = true;
-  boot.lanzaboote.enable = false;
+  # boot.bootspec.enable = true;
+  # boot.lanzaboote.enable = false;
 
   services.scx = {
     enable = true;
