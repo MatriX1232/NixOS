@@ -68,17 +68,16 @@
 
   services.resolved = {
     enable = true;
-    dnssec = "true";
-    domains = [ "~." ];
-    fallbackDns = [
-      "1.1.1.1#cloudflare-dns.com"
-      "9.9.9.9#dns.quad9.net"
-    ];
-
     # In 26.05, settings follow the [Section] key structure
     settings = {
       Resolve = {
         DNSOverTLS = "opportunistic";
+        DNSSEC = "true";
+        Domains = [ "~." ];
+        FallbackDNS = [
+          "1.1.1.1#cloudflare-dns.com"
+          "9.9.9.9#dns.quad9.net"
+        ];
       };
     };
   };

@@ -138,5 +138,69 @@
       };
     };
 
+    # --- PROFILE 3: WINDOWS VM (VFIO GPU Passthrough) ---
+    windows-vm.configuration = {
+      system.nixos.tags = [ "VFIO" ];
+
+      # Ensure TPM certificate directory exists with correct permissions
+      systemd.tmpfiles.rules = [ "d /var/lib/swtpm-localca 0750 tss tss -" ];
+
+      # 1. Disable standard NVIDIA drivers so VFIO can claim the card
+      services.xserver.videoDrivers = lib.mkForce [ "modesetting" ];
+      hardware.nvidia.open = lib.mkForce false;
+      hardware.nvidia.prime.offload.enable = lib.mkForce false;
+
+      # 2. Isolate the GPU via Kernel Parameters
+      boot.kernelParams = [
+        "intel_iommu=on"
+        "iommu=pt"
+        # lspci -nn
+        "vfio-pci.ids=10de:2860,10de:22bd"
+      ];
+
+      # 3. Load VFIO modules early in the boot process
+      boot.initrd.kernelModules = [
+        "vfio_pci"
+        "vfio"
+        "vfio_iommu_type1"
+      ];
+
+      # 4. Enable Virtualization and Windows 11 Requirements (TPM 2.0 & UEFI)
+      virtualisation.libvirtd = {
+        enable = true;
+        qemu = {
+          package = pkgs.qemu_kvm;
+          runAsRoot = true; # Temporary measure to bypass permission loops
+          swtpm.enable = true; # Critical for Windows 11
+          verbatimConfig = ''
+            user = "msolinsk"
+            group = "libvirtd"
+            cgroup_device_acl = [
+              "/dev/null", "/dev/full", "/dev/zero",
+              "/dev/random", "/dev/urandom",
+              "/dev/ptmx", "/dev/kvm", "/dev/kqemu",
+              "/dev/rtc","/dev/hpet",
+              "/dev/input/by-path/pci-0000:00:15.0-platform-i2c_designware.0-event-mouse",
+              "/dev/input/by-path/platform-i8042-serio-0-event-kbd",
+              "/dev/input/by-path/pci-0000:00:14.0-usb-0:2.2:1.0-event-mouse",
+              "/dev/input/by-path/pci-0000:00:14.0-usb-0:2.3:1.0-event-kbd"
+            ]
+          '';
+        };
+      };
+
+      # 5. Add Virtualization Tools to this profile
+      environment.systemPackages = with pkgs; [
+        virt-manager
+        virtio-win # Windows drivers for the VM
+      ];
+
+      # 6. Ensure your user can run the VM
+      users.users.msolinsk.extraGroups = [
+        "libvirtd"
+        "kvm"
+      ];
+    };
+
   };
 }
