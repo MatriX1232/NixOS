@@ -40,7 +40,7 @@
 
     # Gaming & Graphics
     protonup-qt
-    heroic
+    umu-launcher
     mangohud
     vulkan-tools
     libva-utils
@@ -75,9 +75,8 @@
     jellyfin-desktop
     bitwarden-desktop
     sony-headphones-client
+    localsend
   ];
-
-  services.tailscale.enable = true;
 
   programs.rog-control-center.enable = true;
   programs.gamescope.enable = true;

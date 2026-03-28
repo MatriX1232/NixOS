@@ -47,7 +47,8 @@
   networking.nftables.enable = true;
   networking.firewall = {
     enable = true;
-    # Gaming: Allow Steam Local Discovery
+    trustedInterfaces = [ "tailscale0" ];
+    checkReversePath = "loose";
     allowedTCPPortRanges = [
       {
         from = 1714;
@@ -60,11 +61,11 @@
         to = 1764;
       }
     ];
-    allowedUDPPorts = [ 27036 ]; # Steam Remote Play
+    allowedUDPPorts = [
+      27036
+      41641
+    ];
   };
-
-  # DNS-over-TLS + PiHole Integration
-  # networking.nameservers = [ "192.168.1.154" ]; # PiHole first
 
   services.resolved = {
     enable = true;
@@ -72,14 +73,42 @@
     settings = {
       Resolve = {
         DNSOverTLS = "opportunistic";
-        DNSSEC = "true";
-        Domains = [ "~." ];
+        DNSSEC = "false";
+        # Domains = [ "~." ];
         FallbackDNS = [
           "1.1.1.1#cloudflare-dns.com"
           "9.9.9.9#dns.quad9.net"
         ];
       };
     };
+  };
+
+  services.tailscale = {
+    enable = true;
+    useRoutingFeatures = "client";
+  };
+  systemd.services.tailscale-autoconnect = {
+    description = "Automatic connection to Tailscale";
+    after = [
+      "network-pre.target"
+      "tailscaled.service"
+    ];
+    wants = [
+      "network-pre.target"
+      "tailscaled.service"
+    ];
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig.Type = "oneshot";
+
+    # Using a local file for the key to keep your config clean/private
+    script = ''
+      # Wait for the service to be ready
+      sleep 2
+      ${pkgs.tailscale}/bin/tailscale up \
+        --authkey=$(cat /etc/nixos/tailscale.key) \
+        --accept-dns=true \
+        --accept-routes=true
+    '';
   };
 
   # Ensure NetworkManager uses systemd-resolved

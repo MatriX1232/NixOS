@@ -97,8 +97,8 @@ in
 
       # --- TAILSCALE ALIASES ---
       tsoff = "sudo tailscale down";
-      tson = "sudo tailscale up --accept-routes --exit-node= --exit-node-allow-lan-access=true && tailscale status";
-      tsnode = "sudo tailscale up --exit-node=100.110.227.95 --exit-node-allow-lan-access=true --accept-routes && tailscale status";
+      tsnode = "sudo tailscale up --accept-dns=true --accept-routes=true --exit-node=100.110.227.95 --exit-node-allow-lan-access=true";
+      tson = "sudo tailscale up --accept-dns=true --accept-routes=true --exit-node=";
       tsstat = "tailscale status";
     };
   };

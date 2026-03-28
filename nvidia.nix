@@ -18,6 +18,7 @@
       intel-media-driver # iGPU HW Accel (iHD)
       intel-compute-runtime # OpenCL for Intel
       nvidia-vaapi-driver # dGPU HW Accel for offload
+      nv-codec-headers-12
     ];
   };
 
@@ -130,6 +131,11 @@
         prime.offload.enable = lib.mkForce false;
         prime.offload.enableOffloadCmd = lib.mkForce false;
       };
+
+      hardware.graphics.extraPackages = with pkgs; [
+        nvidia-vaapi-driver
+        nv-codec-headers-12 # Helpful for some video tasks
+      ];
 
       environment.variables = {
         # Force hardware video acceleration to use NVIDIA NVDEC
