@@ -8,7 +8,9 @@
 {
   environment.systemPackages = with pkgs; [
     # Dev
+    vim
     zed-editor
+    vscode
     nil
     nixpkgs-fmt
     direnv
@@ -23,6 +25,9 @@
     uv
     docker
     clang-tools
+    gnumake
+    mlx42
+    llvmPackages.libcxxClang
     ollama-cuda
     lmstudio
     ghostty
@@ -77,6 +82,14 @@
     sony-headphones-client
     localsend
   ];
+
+  services.flatpak.enable = true;
+  systemd.services.flatpak-repo = {
+    wantedBy = [ "multi-user.target" ];
+    script = ''
+      ${pkgs.flatpak}/bin/flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+    '';
+  };
 
   programs.rog-control-center.enable = true;
   programs.gamescope.enable = true;

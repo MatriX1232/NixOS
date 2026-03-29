@@ -89,8 +89,11 @@ in
     };
 
     shellAliases = {
+      # --- QOL ALIASES ---
       cls = "clear";
       ls = "eza --icons";
+
+      # --- SYS ALIASES ---
       rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#msolinsk";
       nixupdate = "nix flake update /etc/nixos && rebuild";
       nixconf = "sudo ZED_ALLOW_ROOT=true zeditor /etc/nixos/";

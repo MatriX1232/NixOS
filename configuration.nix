@@ -45,7 +45,9 @@
     rulesProvider = pkgs.ananicy-rules-cachyos;
   };
 
-  # services.flatpak.enable = true;
+  # Enasbles dialog boxes in some apps
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
 
   zramSwap.enable = true;
   zramSwap.memoryPercent = 50;
