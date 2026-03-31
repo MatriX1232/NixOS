@@ -45,9 +45,26 @@
     rulesProvider = pkgs.ananicy-rules-cachyos;
   };
 
-  # Enasbles dialog boxes in some apps
-  xdg.portal.enable = true;
-  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  xdg.portal = {
+    enable = true;
+    # Use 'xdg-desktop-portal-gnome' as the primary, with 'gtk' as fallback
+    extraPortals = [
+      pkgs.xdg-desktop-portal-gnome
+      pkgs.xdg-desktop-portal-gtk
+    ];
+    config = {
+      common = {
+        # Use the GNOME portal for everything by default
+        default = [
+          "gnome"
+          "gtk"
+        ];
+        # Critical for Heroic's file validation/notifications
+        "org.freedesktop.impl.portal.Settings" = [ "gnome" ];
+        "org.freedesktop.impl.portal.Notification" = [ "gnome" ];
+      };
+    };
+  };
 
   zramSwap.enable = true;
   zramSwap.memoryPercent = 50;
@@ -89,6 +106,7 @@
       experimental-features=['scale-monitor-framebuffer', 'variable-refresh-rate', 'xwayland-native-scaling']
     '';
   };
+
   services.xserver.xkb = {
     layout = "pl";
     variant = "";

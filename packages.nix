@@ -61,6 +61,7 @@
     ananicy-cpp
     tailscale
     pciutils
+    zenity
 
     # GNOME Extensions
     gnome-extension-manager
@@ -81,6 +82,8 @@
     bitwarden-desktop
     sony-headphones-client
     localsend
+    heroic
+    slack
   ];
 
   services.flatpak.enable = true;
@@ -119,7 +122,7 @@
       "security.sandbox.content.level" = 2;
 
       # Wayland Performance
-      "widget.dmabuf.force-enabled" = true;
+      # "widget.dmabuf.force-enabled" = true;
       "widget.wayland.fractional-scale-enabled" = true;
     };
   };
@@ -161,6 +164,8 @@
     # 3. Help with blurriness in some GTK apps
     GDK_BACKEND = "wayland,x11";
     QT_QPA_PLATFORM = "wayland;xcb";
+
+    GTK_USE_PORTAL = "1";
 
     PROTON_ENABLE_NVAPI = "1";
     NV_PRIME_RENDER_OFFLOAD = "1";

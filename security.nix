@@ -105,7 +105,7 @@
       # Wait for the service to be ready
       sleep 2
       ${pkgs.tailscale}/bin/tailscale up \
-        --authkey=$(cat /etc/nixos/tailscale.key) \
+        --authkey=$(cat /etc/nixos/.tailscale.key) \
         --accept-dns=true \
         --accept-routes=true
     '';
