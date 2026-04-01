@@ -133,10 +133,15 @@
         # PREVENTS CRASHES when Intel is disconnected
         powerManagement.finegrained = lib.mkForce false;
 
+        # for the 100/120W boost
+        dynamicBoost.enable = true;
+
         # Disable PRIME offloading (DIRECT dGPU)
         prime.offload.enable = lib.mkForce false;
         prime.offload.enableOffloadCmd = lib.mkForce false;
       };
+
+      services.power-profiles-daemon.enable = true;
 
       hardware.graphics.extraPackages = with pkgs; [
         nvidia-vaapi-driver

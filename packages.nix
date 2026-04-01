@@ -84,6 +84,7 @@
     localsend
     heroic
     slack
+    prismlauncher
   ];
 
   services.flatpak.enable = true;
