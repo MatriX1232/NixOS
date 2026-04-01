@@ -47,19 +47,20 @@
 
   xdg.portal = {
     enable = true;
-    # Use 'xdg-desktop-portal-gnome' as the primary, with 'gtk' as fallback
+    xdgOpenUsePortal = true;
+
     extraPortals = [
       pkgs.xdg-desktop-portal-gnome
       pkgs.xdg-desktop-portal-gtk
     ];
+
     config = {
       common = {
-        # Use the GNOME portal for everything by default
+        # Prefer gtk first for FileChooser compatibility
         default = [
-          "gnome"
           "gtk"
+          "gnome"
         ];
-        # Critical for Heroic's file validation/notifications
         "org.freedesktop.impl.portal.Settings" = [ "gnome" ];
         "org.freedesktop.impl.portal.Notification" = [ "gnome" ];
       };
