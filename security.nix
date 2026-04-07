@@ -64,6 +64,12 @@
     allowedUDPPorts = [
       27036
       41641
+      53317
+      5500 # VSCode Live Webpage
+    ];
+    allowedTCPPorts = [
+      53317
+      5500 # VSCode Live Webpage
     ];
   };
 

@@ -16,6 +16,8 @@
     ./security.nix
   ];
 
+  nix.settings.auto-optimise-store = true;
+
   # Bootloader
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -68,7 +70,7 @@
   };
 
   zramSwap.enable = true;
-  zramSwap.memoryPercent = 50;
+  zramSwap.memoryPercent = 25;
   zramSwap.algorithm = "zstd";
 
   nix.settings = {
@@ -104,7 +106,7 @@
     extraGSettingsOverridePackages = [ pkgs.mutter ];
     extraGSettingsOverrides = ''
       [org.gnome.mutter]
-      experimental-features=['scale-monitor-framebuffer', 'variable-refresh-rate', 'xwayland-native-scaling']
+      experimental-features=['scale-monitor-framebuffer', 'variable-refresh-rate', 'xwayland-native-scaling', 'kms-modifiers']
     '';
   };
 

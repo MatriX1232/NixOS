@@ -47,6 +47,7 @@
     protonup-qt
     umu-launcher
     mangohud
+    goverlay
     vulkan-tools
     libva-utils
     mesa-demos

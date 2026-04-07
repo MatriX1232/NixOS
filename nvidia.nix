@@ -125,8 +125,9 @@
 
       boot.kernelParams = [
         "nvidia-drm.modeset=1"
-        "nvidia-drm.fbdev=1" # MUST be 1 for GNOME HDR
+        # "nvidia-drm.fbdev=1" # MUST be 1 for GNOME HDR
         "NV_REG_ENABLE_USERSPACE_MODESET=1"
+        "nvidia_drm.vrr_enabled=1"
       ];
 
       hardware.nvidia = {
@@ -149,13 +150,14 @@
       ];
 
       environment.variables = {
+        "__GL_SYNC_TO_VBLANK" = "1";
         # Force hardware video acceleration to use NVIDIA NVDEC
         LIBVA_DRIVER_NAME = lib.mkForce "nvidia";
         VDPAU_DRIVER = lib.mkForce "nvidia";
 
-        DXVK_HDR = "1";
-        ENABLE_HDR_WSI = "1";
-        PROTON_FORCE_MAYBE_HDR = "1";
+        # DXVK_HDR = "1";
+        # ENABLE_HDR_WSI = "1";
+        # PROTON_FORCE_MAYBE_HDR = "1";
         VKD3D_CONFIG = "dxr11,force_vendor_id=0x10de";
       };
     };
@@ -178,6 +180,11 @@
         "iommu=pt"
         # lspci -nn
         "vfio-pci.ids=10de:2860,10de:22bd"
+
+        # --- CPU Isolation for P-Cores ---
+        "isolcpus=0-11" # Hide P-Cores from the host scheduler
+        "nohz_full=0-11" # Disable the scheduling-clock tick on P-Cores
+        "rcu_nocbs=0-11" # Move RCU callbacks to the E-Cores
       ];
 
       # 3. Load VFIO modules early in the boot process
