@@ -30,6 +30,8 @@
     llvmPackages.libcxxClang
     ollama-cuda
     lmstudio
+    # openclaw
+    open-webui
     ghostty
 
     # --- CUDA DEVELOPMENT TOOLS ---
