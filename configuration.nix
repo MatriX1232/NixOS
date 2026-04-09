@@ -47,25 +47,40 @@
     rulesProvider = pkgs.ananicy-rules-cachyos;
   };
 
+  # xdg.portal = {
+  #   enable = true;
+  #   xdgOpenUsePortal = true;
+
+  #   extraPortals = [
+  #     pkgs.xdg-desktop-portal-gnome
+  #     pkgs.xdg-desktop-portal-gtk
+  #   ];
+
+  #   config = {
+  #     common = {
+  #       # Prefer gtk first for FileChooser compatibility
+  #       default = [
+  #         "gtk"
+  #         "gnome"
+  #       ];
+  #       "org.freedesktop.impl.portal.Settings" = [ "gnome" ];
+  #       "org.freedesktop.impl.portal.Notification" = [ "gnome" ];
+  #     };
+  #   };
+  # };
+
   xdg.portal = {
     enable = true;
-    xdgOpenUsePortal = true;
-
-    extraPortals = [
-      pkgs.xdg-desktop-portal-gnome
-      pkgs.xdg-desktop-portal-gtk
-    ];
-
+    extraPortals = [ pkgs.kdePackages.xdg-desktop-portal-kde ];
     config = {
-      common = {
-        # Prefer gtk first for FileChooser compatibility
+      common.default = [ "gtk" ];
+      plasma = {
         default = [
+          "kde"
           "gtk"
-          "gnome"
         ];
-        "org.freedesktop.impl.portal.Settings" = [ "gnome" ];
-        "org.freedesktop.impl.portal.Notification" = [ "gnome" ];
       };
+      # Keep your existing hyprland/gnome blocks here too
     };
   };
 
@@ -98,17 +113,31 @@
     LC_TIME = "pl_PL.UTF-8";
   };
 
+  hardware.bluetooth.enable = true;
+  hardware.bluetooth.powerOnBoot = true; # Automatically turn on when booting
+  # Optional: Better support for modern headphones (LDAC, AptX, etc.)
+  # Since you are already using Pipewire, this is usually automatic,
+  # but these help with specific codecs.
+  services.pipewire.wireplumber.extraConfig."10-bluetooth-policy" = {
+    "monitor.bluez.properties" = {
+      "bluez5.enable-sbc-xq" = true;
+      "bluez5.enable-msbc" = true;
+      "bluez5.enable-hw-volume" = true;
+    };
+  };
+
   # Desktop Environment
   services.displayManager.gdm.enable = true;
   services.displayManager.gdm.wayland = true;
-  services.desktopManager.gnome = {
-    enable = true;
-    extraGSettingsOverridePackages = [ pkgs.mutter ];
-    extraGSettingsOverrides = ''
-      [org.gnome.mutter]
-      experimental-features=['scale-monitor-framebuffer', 'variable-refresh-rate', 'xwayland-native-scaling', 'kms-modifiers']
-    '';
-  };
+  services.desktopManager.plasma6.enable = true;
+  # services.desktopManager.gnome = {
+  #   enable = true;
+  #   extraGSettingsOverridePackages = [ pkgs.mutter ];
+  #   extraGSettingsOverrides = ''
+  #     [org.gnome.mutter]
+  #     experimental-features=['scale-monitor-framebuffer', 'variable-refresh-rate', 'xwayland-native-scaling', 'kms-modifiers']
+  #   '';
+  # };
 
   services.xserver.xkb = {
     layout = "pl";

@@ -67,13 +67,13 @@
     zenity
 
     # GNOME Extensions
-    gnome-extension-manager
-    gnomeExtensions.blur-my-shell
-    gnomeExtensions.gpu-supergfxctl-switch
-    gnomeExtensions.in-picture
-    gnomeExtensions.perf-switcher-asusctl
-    gnomeExtensions.vitals
-    gnomeExtensions.just-perfection
+    # gnome-extension-manager
+    # gnomeExtensions.blur-my-shell
+    # gnomeExtensions.gpu-supergfxctl-switch
+    # gnomeExtensions.in-picture
+    # gnomeExtensions.perf-switcher-asusctl
+    # gnomeExtensions.vitals
+    # gnomeExtensions.just-perfection
     # gnomeExtensions.power-off-options
 
     # Other
@@ -88,6 +88,10 @@
     heroic
     slack
     prismlauncher
+
+    # KDE
+    kdePackages.kde-gtk-config # Helps sync themes
+    kdePackages.colord-kde # ICC color profiles
   ];
 
   services.flatpak.enable = true;
