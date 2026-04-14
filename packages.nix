@@ -35,6 +35,8 @@
     ghostty
     ffmpeg-full
     ncdu
+    busybox
+    nvme-cli
 
     # --- CUDA DEVELOPMENT TOOLS ---
     # cudaPackages.cuda_nvcc # CUDA Compiler

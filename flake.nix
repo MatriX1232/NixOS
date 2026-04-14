@@ -33,7 +33,7 @@
       spicetify-nix,
       cachyos-kernel,
       lanzaboote,
-      openclaw,
+      # openclaw,
       ...
     }@inputs:
     {
@@ -47,7 +47,7 @@
           {
             nixpkgs.overlays = [
               inputs.cachyos-kernel.overlays.pinned
-              openclaw.overlays.default
+              # openclaw.overlays.default
             ];
           }
 
