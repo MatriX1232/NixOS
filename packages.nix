@@ -33,6 +33,8 @@
     # openclaw
     open-webui
     ghostty
+    ffmpeg-full
+    ncdu
 
     # --- CUDA DEVELOPMENT TOOLS ---
     # cudaPackages.cuda_nvcc # CUDA Compiler
@@ -65,16 +67,7 @@
     tailscale
     pciutils
     zenity
-
-    # GNOME Extensions
-    # gnome-extension-manager
-    # gnomeExtensions.blur-my-shell
-    # gnomeExtensions.gpu-supergfxctl-switch
-    # gnomeExtensions.in-picture
-    # gnomeExtensions.perf-switcher-asusctl
-    # gnomeExtensions.vitals
-    # gnomeExtensions.just-perfection
-    # gnomeExtensions.power-off-options
+    lm_sensors
 
     # Other
     eza
@@ -88,6 +81,23 @@
     heroic
     slack
     prismlauncher
+    lutris
+    onlyoffice-desktopeditors
+    cine
+
+    (wrapOBS.override
+      {
+        obs-studio = pkgs.obs-studio.override { cudaSupport = true; };
+      }
+      {
+        plugins = with obs-studio-plugins; [
+          obs-vkcapture
+          obs-pipewire-audio-capture
+          obs-vaapi
+          # obs-nvfbc
+        ];
+      }
+    )
 
     # KDE
     kdePackages.kde-gtk-config # Helps sync themes
@@ -130,7 +140,7 @@
       "security.sandbox.content.level" = 2;
 
       # Wayland Performance
-      # "widget.dmabuf.force-enabled" = true;
+      "widget.dmabuf.force-enabled" = true;
       "widget.wayland.fractional-scale-enabled" = true;
     };
   };
@@ -138,32 +148,7 @@
   programs.steam = {
     enable = true;
     localNetworkGameTransfers.openFirewall = true;
-    # extraArgs = "-forcedesktopscaling 1.25";
   };
-
-  # programs.nix-ld.enable = true;
-  # programs.nix-ld.libraries = with pkgs; [
-  #   stdenv.cc.cc
-  #   zlib
-  #   fuse3
-  #   icu
-  #   nss
-  #   openssl
-  #   curl
-  #   expat
-
-  #   # CUDA libraries for nix-ld to expose to Python
-  #   cudaPackages.cuda_cudart
-  #   cudaPackages.libcublas
-  #   cudaPackages.libcufft
-  #   cudaPackages.libcurand
-  #   cudaPackages.libcusolver
-  #   cudaPackages.libcusparse
-  #   cudaPackages.cudnn
-  #   linuxPackages.nvidia_x11
-  #   libGL
-  #   glib
-  # ];
 
   environment.variables = {
     NIXOS_OZONE_WL = "1";

@@ -25,7 +25,11 @@
     "sdhci_pci"
   ];
   boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-intel" ];
+  boot.kernelModules = [
+    "kvm-intel"
+    "coretemp"
+    "nct6775"
+  ];
   boot.extraModulePackages = [ ];
 
   fileSystems."/" = {

@@ -147,18 +147,16 @@
 
       hardware.graphics.extraPackages = with pkgs; [
         nvidia-vaapi-driver
+        libvdpau-va-gl
         nv-codec-headers-12 # Helpful for some video tasks
       ];
 
       environment.variables = {
-        "__GL_SYNC_TO_VBLANK" = "1";
+        __GL_SYNC_TO_VBLANK = "1";
+        __GL_SHADER_DISK_CACHE_SIZE = "10000000000";
         # Force hardware video acceleration to use NVIDIA NVDEC
         LIBVA_DRIVER_NAME = lib.mkForce "nvidia";
         VDPAU_DRIVER = lib.mkForce "nvidia";
-
-        # DXVK_HDR = "1";
-        # ENABLE_HDR_WSI = "1";
-        # PROTON_FORCE_MAYBE_HDR = "1";
         VKD3D_CONFIG = "dxr11,force_vendor_id=0x10de";
       };
     };

@@ -31,9 +31,7 @@
     "net.core.default_qdisc" = "cake";
   };
 
-  # Lanzaboote prep
-  # boot.bootspec.enable = true;
-  # boot.lanzaboote.enable = false;
+  hardware.sensor.iio.enable = true;
 
   services.scx = {
     enable = true;
@@ -172,6 +170,50 @@
       };
     };
   };
+
+  # services.openclaw = {
+  #   enable = true;
+  #   domain = "openclaw.home";
+
+  #   extraGatewayConfig = {
+  #     gateway = {
+  #       mode = "local";
+  #       auth = {
+  #         tokenFile = "/var/lib/openclaw/auth-token";
+  #       };
+  #     };
+  #   };
+
+  #   # Change provider to ollama
+  #   modelProvider = "ollama";
+  #   modelApiKeyFile = pkgs.writeText "ollama-dummy" "ollama-local";
+
+  #   discord = {
+  #     enable = true;
+  #     tokenFile = "/run/secrets/discord-bot-token";
+  #   };
+
+  #   # Tool security (defaults shown — you don't need to set these)
+  #   toolSecurity = "allowlist";
+  #   toolAllowlist = [
+  #     "read"
+  #     "write"
+  #     "edit"
+  #     # "web_search"
+  #     "web_fetch"
+  #     "message"
+  #     "tts"
+  #   ];
+  # };
+  # systemd.services.openclaw-gateway.serviceConfig = {
+  #   PrivateNetwork = false;
+  #   RestrictAddressFamilies = [
+  #     "AF_UNIX"
+  #     "AF_INET"
+  #     "AF_INET6"
+  #     "AF_NETLINK" # Fix for OpenClaw
+  #   ];
+  # };
 
   # Modern Nix Features
   nix.settings.experimental-features = [

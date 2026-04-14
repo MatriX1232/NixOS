@@ -21,6 +21,8 @@
     };
 
     cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+
+    # openclaw.url = "github:Scout-DJ/openclaw-nix";
   };
 
   outputs =
@@ -31,6 +33,7 @@
       spicetify-nix,
       cachyos-kernel,
       lanzaboote,
+      openclaw,
       ...
     }@inputs:
     {
@@ -39,9 +42,13 @@
         modules = [
           ./configuration.nix
           lanzaboote.nixosModules.lanzaboote
+          # openclaw.nixosModules.default
 
           {
-            nixpkgs.overlays = [ inputs.cachyos-kernel.overlays.pinned ];
+            nixpkgs.overlays = [
+              inputs.cachyos-kernel.overlays.pinned
+              openclaw.overlays.default
+            ];
           }
 
           # Add the Home Manager NixOS module
