@@ -45,31 +45,12 @@
     rulesProvider = pkgs.ananicy-rules-cachyos;
   };
 
-  # xdg.portal = {
-  #   enable = true;
-  #   xdgOpenUsePortal = true;
-
-  #   extraPortals = [
-  #     pkgs.xdg-desktop-portal-gnome
-  #     pkgs.xdg-desktop-portal-gtk
-  #   ];
-
-  #   config = {
-  #     common = {
-  #       # Prefer gtk first for FileChooser compatibility
-  #       default = [
-  #         "gtk"
-  #         "gnome"
-  #       ];
-  #       "org.freedesktop.impl.portal.Settings" = [ "gnome" ];
-  #       "org.freedesktop.impl.portal.Notification" = [ "gnome" ];
-  #     };
-  #   };
-  # };
-
   xdg.portal = {
     enable = true;
-    extraPortals = [ pkgs.kdePackages.xdg-desktop-portal-kde ];
+    extraPortals = [
+      pkgs.kdePackages.xdg-desktop-portal-kde
+      pkgs.xdg-desktop-portal-hyprland
+    ];
     config = {
       common.default = [ "gtk" ];
       plasma = {
@@ -78,7 +59,6 @@
           "gtk"
         ];
       };
-      # Keep your existing hyprland/gnome blocks here too
     };
   };
 
@@ -128,14 +108,23 @@
   services.displayManager.gdm.enable = true;
   services.displayManager.gdm.wayland = true;
   services.desktopManager.plasma6.enable = true;
-  # services.desktopManager.gnome = {
-  #   enable = true;
-  #   extraGSettingsOverridePackages = [ pkgs.mutter ];
-  #   extraGSettingsOverrides = ''
-  #     [org.gnome.mutter]
-  #     experimental-features=['scale-monitor-framebuffer', 'variable-refresh-rate', 'xwayland-native-scaling', 'kms-modifiers']
-  #   '';
-  # };
+
+  programs.hyprland = {
+    enable = true;
+    xwayland.enable = true;
+
+    # IMPORTANT (2026 best practice)
+    withUWSM = true;
+  };
+
+  programs.uwsm = {
+    enable = true;
+    waylandCompositors.hyprland = {
+      prettyName = "Hyprland";
+      comment = "Hyprland (UWSM)";
+      binPath = "/run/current-system/sw/bin/Hyprland";
+    };
+  };
 
   services.xserver.xkb = {
     layout = "pl";
@@ -182,7 +171,27 @@
   #         tokenFile = "/var/lib/openclaw/auth-token";
   #       };
   #     };
-  #   };
+  #   }; # Tool security (defaults shown — you don't need to set these)
+  #   toolSecurity = "allowlist";
+  #   toolAllowlist = [
+  #     "read"
+  #     "write"
+  #     "edit"
+  #     # "web_search"
+  #     "web_fetch"
+  #     "message"
+  #     "tts"
+  #   ];
+  # };
+  # systemd.services.openclaw-gateway.serviceConfig = {
+  #   PrivateNetwork = false;
+  #   RestrictAddressFamilies = [
+  #     "AF_UNIX"
+  #     "AF_INET"
+  #     "AF_INET6"
+  #     "AF_NETLINK" # Fix for OpenClaw
+  #   ];
+  # };
 
   #   # Change provider to ollama
   #   modelProvider = "ollama";

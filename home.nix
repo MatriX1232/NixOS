@@ -7,6 +7,31 @@
 
 let
   spicePkgs = inputs.spicetify-nix.legacyPackages.${pkgs.stdenv.hostPlatform.system};
+
+  config_text = builtins.toJSON {
+    "show_custom_themes" = true;
+    "setting_defaults" = {
+      "custom_themes" = [
+        {
+          "name" = "Dracula";
+          "is_dark" = true;
+          "colors" = {
+            "accent-color" = "#bd93f9";
+            "primary-color" = "#bd93f9";
+            "warning-color" = "#ff5555";
+            "sidebar-color" = "#282a36";
+            "roomlist-background-color" = "#282a36";
+            "timeline-background-color" = "#282a36";
+            "timeline-text-color" = "#f8f8f2";
+            "secondary-content-color" = "#6272a4";
+            "tertiary-content-color" = "#44475a";
+            "focus-bg-color" = "#44475a";
+          };
+        }
+      ];
+    };
+  };
+
 in
 {
   home.username = "msolinsk";
@@ -15,14 +40,25 @@ in
 
   programs.home-manager.enable = true;
 
+  home.file.".config/Element/config.json" = {
+    text = config_text;
+    force = true;
+  };
+
+  home.file.".config/Riot/config.json" = {
+    text = config_text;
+    force = true;
+  };
+
   # --- USER PACKAGES --- #
   home.packages = with pkgs; [
     discord
     easyeffects
     gparted-full
-    element-desktop
     steam
     appflowy
+    element-desktop
+    cinny-desktop
   ];
 
   programs.spicetify = {

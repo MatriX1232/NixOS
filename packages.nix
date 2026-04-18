@@ -34,9 +34,7 @@
     open-webui
     ghostty
     ffmpeg-full
-    ncdu
-    busybox
-    nvme-cli
+    halloy
 
     # --- CUDA DEVELOPMENT TOOLS ---
     # cudaPackages.cuda_nvcc # CUDA Compiler
@@ -70,6 +68,9 @@
     pciutils
     zenity
     lm_sensors
+    ncdu
+    busybox
+    nvme-cli
 
     # Other
     eza
@@ -104,6 +105,16 @@
     # KDE
     kdePackages.kde-gtk-config # Helps sync themes
     kdePackages.colord-kde # ICC color profiles
+
+    # Hyprland
+    waybar
+    mako
+    rofi
+    grim
+    slurp
+    wl-clipboard
+    pavucontrol
+    brightnessctl
   ];
 
   services.flatpak.enable = true;

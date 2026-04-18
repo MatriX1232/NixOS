@@ -124,6 +124,7 @@
       system.nixos.tags = [ "gaming-mux" ];
 
       boot.kernelParams = [
+        "nvidia.NVreg_EnableGpuFirmware=0"
         "nvidia-drm.modeset=1"
         # "nvidia-drm.fbdev=1" # MUST be 1 for GNOME HDR
         "nvidia_drm.fbdev=1" # Helps with G-Sync stability and smooth boot
