@@ -44,10 +44,16 @@
   # ---------------------------------------------------------
   # 3. NETWORK SECURITY (Firewall & Privacy)
   # ---------------------------------------------------------
+  services.openssh.enable = true;
+  programs.ssh.startAgent = true;
+
   networking.nftables.enable = true;
   networking.firewall = {
     enable = true;
-    trustedInterfaces = [ "tailscale0" ];
+    trustedInterfaces = [
+      # "tailscale0"
+      "wg0"
+    ];
     checkReversePath = "loose";
     allowedTCPPortRanges = [
       {
@@ -75,46 +81,17 @@
 
   services.resolved = {
     enable = true;
-    # In 26.05, settings follow the [Section] key structure
+    # W nowszych wersjach NixOS lepiej używać dedykowanych atrybutów zamiast surowego settings.
+    # Używamy domen "~.", aby wymusić najwyższy priorytet routingu DNS.
+    domains = [ "~." ];
+
     settings = {
       Resolve = {
-        DNSOverTLS = "opportunistic";
+        # WYŁĄCZAMY DoT. Lokalny AdGuard nie ma certyfikatu dla surowego IP.
+        DNSOverTLS = "no";
         DNSSEC = "false";
-        # Domains = [ "~." ];
-        FallbackDNS = [
-          "1.1.1.1#cloudflare-dns.com"
-          "9.9.9.9#dns.quad9.net"
-        ];
       };
     };
-  };
-
-  services.tailscale = {
-    enable = true;
-    useRoutingFeatures = "client";
-  };
-  systemd.services.tailscale-autoconnect = {
-    description = "Automatic connection to Tailscale";
-    after = [
-      "network-pre.target"
-      "tailscaled.service"
-    ];
-    wants = [
-      "network-pre.target"
-      "tailscaled.service"
-    ];
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig.Type = "oneshot";
-
-    # Using a local file for the key to keep your config clean/private
-    script = ''
-      # Wait for the service to be ready
-      sleep 2
-      ${pkgs.tailscale}/bin/tailscale up \
-        --authkey=$(cat /etc/nixos/.tailscale.key) \
-        --accept-dns=true \
-        --accept-routes=true
-    '';
   };
 
   # Ensure NetworkManager uses systemd-resolved

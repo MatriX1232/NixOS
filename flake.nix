@@ -20,6 +20,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # microvm = {
+    #   url = "github:microvm-nix/microvm.nix";
+    #   inputs.nixpkgs.follows = "nixpkgs";
+    # };
+
     cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
 
     # openclaw.url = "github:Scout-DJ/openclaw-nix";
@@ -33,7 +38,6 @@
       spicetify-nix,
       cachyos-kernel,
       lanzaboote,
-      # openclaw,
       ...
     }@inputs:
     {
@@ -42,12 +46,9 @@
         modules = [
           ./configuration.nix
           lanzaboote.nixosModules.lanzaboote
-          # openclaw.nixosModules.default
-
           {
             nixpkgs.overlays = [
               inputs.cachyos-kernel.overlays.pinned
-              # openclaw.overlays.default
             ];
           }
 

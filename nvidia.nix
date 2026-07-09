@@ -19,6 +19,7 @@
       intel-compute-runtime # OpenCL for Intel
       nvidia-vaapi-driver # dGPU HW Accel for offload
       nv-codec-headers-12
+      libvdpau-va-gl
     ];
   };
 
@@ -28,7 +29,7 @@
     modesetting.enable = true;
     open = true;
     nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.latest;
+    package = config.boot.kernelPackages.nvidiaPackages.production;
 
     # Allows dGPU to sleep
     powerManagement.enable = true;
@@ -85,7 +86,7 @@
         "workqueue.power_efficient=Y" # Force power-efficient workqueues
       ];
 
-      # 4. Physically unbind NVIDIA (The "Zero-Leak" Rule)
+      # 4. Unbind NVIDIA
       # This ensures the kernel isn't even looking at the card.
       services.udev.extraRules = lib.mkForce ''
         ACTION=="add", SUBSYSTEM=="pci", ATTR{vendor}=="0x10de", ATTR{remove}="1"
@@ -93,8 +94,8 @@
 
       environment.variables = {
         LIBVA_DRIVER_NAME = lib.mkForce "iHD";
-        GBM_BACKEND = lib.mkForce null;
-        __GLX_VENDOR_LIBRARY_NAME = lib.mkForce null;
+        GBM_BACKEND = lib.mkForce "dri";
+        __GLX_VENDOR_LIBRARY_NAME = lib.mkForce "mesa";
       };
 
       systemd.services.battery-optimizer = {
@@ -153,12 +154,13 @@
       ];
 
       environment.variables = {
-        __GL_SYNC_TO_VBLANK = "1";
         __GL_SHADER_DISK_CACHE_SIZE = "10000000000";
         # Force hardware video acceleration to use NVIDIA NVDEC
         LIBVA_DRIVER_NAME = lib.mkForce "nvidia";
         VDPAU_DRIVER = lib.mkForce "nvidia";
         VKD3D_CONFIG = "dxr11,force_vendor_id=0x10de";
+
+        KWIN_DRM_DEVICES = "/dev/dri/card1:/dev/dri/card2";
       };
     };
 

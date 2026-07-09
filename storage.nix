@@ -41,7 +41,7 @@
   # 4. The NAS - Mateusz
   # Uses systemd automount so it doesn't hang boot.
   fileSystems."/mnt/OrangePI_Mateusz" = {
-    device = "//192.168.1.154/Mateusz";
+    device = "//192.168.0.154/Mateusz";
     fsType = "cifs";
     options =
       let

@@ -16,6 +16,10 @@
     ./security.nix
   ];
 
+  environment.sessionVariables = {
+    KWIN_DRM_DEVICES = "/dev/dri/card1:/dev/dri/card2";
+  };
+
   nix.settings.auto-optimise-store = true;
 
   # Bootloader
@@ -49,10 +53,9 @@
     enable = true;
     extraPortals = [
       pkgs.kdePackages.xdg-desktop-portal-kde
-      pkgs.xdg-desktop-portal-hyprland
     ];
     config = {
-      common.default = [ "gtk" ];
+      common.default = [ "kde" ];
       plasma = {
         default = [
           "kde"
@@ -104,27 +107,15 @@
     };
   };
 
+  nixpkgs.config.permittedInsecurePackages = [
+    "electron-39.8.10"
+  ];
+
   # Desktop Environment
   services.displayManager.gdm.enable = true;
-  services.displayManager.gdm.wayland = true;
   services.desktopManager.plasma6.enable = true;
 
-  programs.hyprland = {
-    enable = true;
-    xwayland.enable = true;
-
-    # IMPORTANT (2026 best practice)
-    withUWSM = true;
-  };
-
-  programs.uwsm = {
-    enable = true;
-    waylandCompositors.hyprland = {
-      prettyName = "Hyprland";
-      comment = "Hyprland (UWSM)";
-      binPath = "/run/current-system/sw/bin/Hyprland";
-    };
-  };
+  virtualisation.docker.enable = true;
 
   services.xserver.xkb = {
     layout = "pl";
@@ -159,70 +150,6 @@
       };
     };
   };
-
-  # services.openclaw = {
-  #   enable = true;
-  #   domain = "openclaw.home";
-
-  #   extraGatewayConfig = {
-  #     gateway = {
-  #       mode = "local";
-  #       auth = {
-  #         tokenFile = "/var/lib/openclaw/auth-token";
-  #       };
-  #     };
-  #   }; # Tool security (defaults shown — you don't need to set these)
-  #   toolSecurity = "allowlist";
-  #   toolAllowlist = [
-  #     "read"
-  #     "write"
-  #     "edit"
-  #     # "web_search"
-  #     "web_fetch"
-  #     "message"
-  #     "tts"
-  #   ];
-  # };
-  # systemd.services.openclaw-gateway.serviceConfig = {
-  #   PrivateNetwork = false;
-  #   RestrictAddressFamilies = [
-  #     "AF_UNIX"
-  #     "AF_INET"
-  #     "AF_INET6"
-  #     "AF_NETLINK" # Fix for OpenClaw
-  #   ];
-  # };
-
-  #   # Change provider to ollama
-  #   modelProvider = "ollama";
-  #   modelApiKeyFile = pkgs.writeText "ollama-dummy" "ollama-local";
-
-  #   discord = {
-  #     enable = true;
-  #     tokenFile = "/run/secrets/discord-bot-token";
-  #   };
-
-  #   # Tool security (defaults shown — you don't need to set these)
-  #   toolSecurity = "allowlist";
-  #   toolAllowlist = [
-  #     "read"
-  #     "write"
-  #     "edit"
-  #     # "web_search"
-  #     "web_fetch"
-  #     "message"
-  #     "tts"
-  #   ];
-  # };
-  # systemd.services.openclaw-gateway.serviceConfig = {
-  #   PrivateNetwork = false;
-  #   RestrictAddressFamilies = [
-  #     "AF_UNIX"
-  #     "AF_INET"
-  #     "AF_INET6"
-  #     "AF_NETLINK" # Fix for OpenClaw
-  #   ];
-  # };
 
   # Modern Nix Features
   nix.settings.experimental-features = [

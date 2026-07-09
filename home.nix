@@ -59,6 +59,7 @@ in
     appflowy
     element-desktop
     cinny-desktop
+    fluffychat
   ];
 
   programs.spicetify = {
@@ -121,6 +122,10 @@ in
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
+    initExtra = ''
+      export SSH_AUTH_SOCK="$HOME/.bitwarden-ssh-agent.sock"
+    '';
+
     oh-my-zsh = {
       enable = true;
       plugins = [ "git" ];
@@ -134,7 +139,7 @@ in
 
       # --- SYS ALIASES ---
       rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#msolinsk";
-      nixupdate = "nix flake update /etc/nixos && rebuild";
+      nixupdate = "sudo nix flake update /etc/nixos && rebuild";
       nixconf = "sudo ZED_ALLOW_ROOT=true zeditor /etc/nixos/";
 
       # --- TAILSCALE ALIASES ---

@@ -35,6 +35,7 @@
     ghostty
     ffmpeg-full
     halloy
+    docker
 
     # --- CUDA DEVELOPMENT TOOLS ---
     # cudaPackages.cuda_nvcc # CUDA Compiler
@@ -71,6 +72,12 @@
     ncdu
     busybox
     nvme-cli
+    wl-clipboard
+    brightnessctl
+    vlc
+    gnupg
+    pinentry-all
+    wireguard-tools
 
     # Other
     eza
@@ -84,9 +91,13 @@
     heroic
     slack
     prismlauncher
-    lutris
+    # lutris
     onlyoffice-desktopeditors
     cine
+    morgen
+    gnome-calculator
+    obsidian
+    curl
 
     (wrapOBS.override
       {
@@ -106,15 +117,8 @@
     kdePackages.kde-gtk-config # Helps sync themes
     kdePackages.colord-kde # ICC color profiles
 
-    # Hyprland
-    waybar
-    mako
-    rofi
-    grim
-    slurp
-    wl-clipboard
-    pavucontrol
-    brightnessctl
+    nextcloud-client
+    kdePackages.dolphin-plugins # Zapewnia ikonki stanu synchronizacji w Dolphinie
   ];
 
   services.flatpak.enable = true;
@@ -136,6 +140,17 @@
         end = "${pkgs.asusctl}/bin/asusctl profile -n Balanced";
       };
     };
+  };
+
+  systemd.user.services."bitwarden-ssh-agent-sock-env" = {
+    description = "Set SSH_AUTH_SOCK to Bitwarden SSH agent socket";
+    wantedBy = [ "graphical-session.target" ];
+    after = [ "graphical-session.target" ];
+    serviceConfig.Type = "oneshot";
+    script = ''
+      mkdir -p "$XDG_RUNTIME_DIR"
+      printf "export SSH_AUTH_SOCK=%q\n" "$HOME/.bitwarden-ssh-agent.sock" > "$XDG_RUNTIME_DIR/ssh_auth_sock.sh"
+    '';
   };
 
   programs.firefox = {
