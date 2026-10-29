@@ -122,9 +122,9 @@ in
     autosuggestion.enable = true;
     syntaxHighlighting.enable = true;
 
-    initExtra = ''
-      export SSH_AUTH_SOCK="$HOME/.bitwarden-ssh-agent.sock"
-    '';
+    # initExtra = ''
+    #   export SSH_AUTH_SOCK="$HOME/.bitwarden-ssh-agent.sock"
+    # '';
 
     oh-my-zsh = {
       enable = true;
@@ -147,6 +147,16 @@ in
       tsnode = "sudo tailscale up --accept-dns=true --accept-routes=true --exit-node=100.110.227.95 --exit-node-allow-lan-access=true";
       tson = "sudo tailscale up --accept-dns=true --accept-routes=true --exit-node=";
       tsstat = "tailscale status";
+    };
+  };
+
+  xdg.desktopEntries.ghostty = {
+    name = "Ghostty";
+    exec = "ghostty";
+    terminal = false;
+    categories = [ "System" "TerminalEmulator" ];
+    settings = {
+      DBusActivatable = "false";
     };
   };
 }

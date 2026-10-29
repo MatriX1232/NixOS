@@ -19,5 +19,5 @@
   users.defaultUserShell = pkgs.zsh;
   users.users.root.shell = pkgs.zsh;
 
-  security.pki.certificateFiles = [ ./rootCA.crt ];
+  # security.pki.certificateFiles = [ ./rootCA.crt ];
 }

@@ -25,7 +25,7 @@
     #   inputs.nixpkgs.follows = "nixpkgs";
     # };
 
-    cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
+    # cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
 
     # openclaw.url = "github:Scout-DJ/openclaw-nix";
   };
@@ -36,7 +36,7 @@
       nixpkgs,
       home-manager,
       spicetify-nix,
-      cachyos-kernel,
+      # cachyos-kernel,
       lanzaboote,
       ...
     }@inputs:
@@ -48,7 +48,7 @@
           lanzaboote.nixosModules.lanzaboote
           {
             nixpkgs.overlays = [
-              inputs.cachyos-kernel.overlays.pinned
+              # inputs.cachyos-kernel.overlays.pinned
             ];
           }
 

@@ -52,6 +52,7 @@
     enable = true;
     trustedInterfaces = [
       # "tailscale0"
+      "enp56s0"
       "wg0"
     ];
     checkReversePath = "loose";
@@ -83,10 +84,10 @@
     enable = true;
     # W nowszych wersjach NixOS lepiej używać dedykowanych atrybutów zamiast surowego settings.
     # Używamy domen "~.", aby wymusić najwyższy priorytet routingu DNS.
-    domains = [ "~." ];
 
     settings = {
       Resolve = {
+        Domains = [ "~." ];
         # WYŁĄCZAMY DoT. Lokalny AdGuard nie ma certyfikatu dla surowego IP.
         DNSOverTLS = "no";
         DNSSEC = "false";
@@ -96,6 +97,22 @@
 
   # Ensure NetworkManager uses systemd-resolved
   networking.networkmanager.dns = "systemd-resolved";
+
+  networking.networkmanager.ensureProfiles.profiles = {
+    x99-direct = {
+      connection = {
+        id = "x99-direct";
+        type = "ethernet";
+        interface-name = "enp56s0";
+        autoconnect = true;
+      };
+      ipv4 = {
+        method = "shared";        # DHCP + NAT, laptop dostaje 10.42.0.1
+        address1 = "10.42.0.1/24";
+      };
+      ipv6.method = "link-local";
+    };
+  };
 
   # ---------------------------------------------------------
   # 4. SYSTEM POLICIES

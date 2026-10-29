@@ -8,6 +8,7 @@
 {
   environment.systemPackages = with pkgs; [
     # Dev
+    opencode
     vim
     zed-editor
     vscode
@@ -31,11 +32,14 @@
     ollama-cuda
     lmstudio
     # openclaw
-    open-webui
+    # open-webui
     ghostty
     ffmpeg-full
     halloy
     docker
+    cmake
+    nmap
+
 
     # --- CUDA DEVELOPMENT TOOLS ---
     # cudaPackages.cuda_nvcc # CUDA Compiler
@@ -84,7 +88,7 @@
     fastfetch
     gparted-full
     aonsoku
-    jellyfin-desktop
+    # jellyfin-desktop
     bitwarden-desktop
     sony-headphones-client
     localsend
@@ -98,6 +102,7 @@
     gnome-calculator
     obsidian
     curl
+    fladder
 
     (wrapOBS.override
       {
@@ -112,6 +117,7 @@
         ];
       }
     )
+    firefoxpwa
 
     # KDE
     kdePackages.kde-gtk-config # Helps sync themes

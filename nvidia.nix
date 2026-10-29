@@ -29,7 +29,7 @@
     modesetting.enable = true;
     open = true;
     nvidiaSettings = true;
-    package = config.boot.kernelPackages.nvidiaPackages.production;
+    package = config.boot.kernelPackages.nvidiaPackages.latest;
 
     # Allows dGPU to sleep
     powerManagement.enable = true;
@@ -64,10 +64,12 @@
     integrated-only.configuration = {
       system.nixos.tags = [ "integrated-only" ];
 
+      boot.kernelPackages = lib.mkForce pkgs.linuxPackages_latest;
+
       # 2. Most efficient scheduler for Hybrid CPUs
       services.scx = {
         enable = lib.mkForce true;
-        scheduler = lib.mkForce "scx_rustland";
+        scheduler = lib.mkForce "scx_lavd";
       };
 
       services.xserver.videoDrivers = lib.mkForce [ "modesetting" ];
@@ -75,16 +77,34 @@
       services.thermald.enable = true;
       powerManagement.powertop.enable = true;
 
-      # 3. Deep Hardware States
+      # 3. Corrected Deep Hardware States for 13th Gen (Xe Driver Framework)
       boot.kernelParams = [
-        "i915.enable_guc=3"
-        "i915.enable_fbc=1"
-        "i915.enable_psr=1"
-        "i915.enable_dc=4" # Deepest Display Sleep
-        "intel_pstate=active" # Hardware-managed EPP
-        "pcie_aspm.policy=powersave" # Stable PCIe saving
-        "workqueue.power_efficient=Y" # Force power-efficient workqueues
+        "xe.allowed_brands=2"
+        "xe.force_probe=*"
+        "pcie_aspm=force"
+        "pcie_aspm.policy=powersave"
+        "workqueue.power_efficient=Y"
+
+        # --- WYMUSZENIE NATYWNEGO MAPOWANIA MWAIT ---
+        "intel_idle.max_cstate=10"
+        "processor.max_cstate=10"
+        "idle=intel" # Całkowicie ignoruje ACPI dla cpuidle i wymusza sterownik Intel
       ];
+
+      # boot.kernelParams = [
+      #   "xe.allowed_brands=2"
+      #   "xe.force_probe=*"
+      #   "pcie_aspm=force"
+      #   "pcie_aspm.policy=powersave"
+      #   "workqueue.power_efficient=Y"
+
+      #   # --- POPRAWKA STEROWNIKA ENERGII ---
+      #   # 1. Usuń lub zakomentuj: "intel_pstate=active"
+      #   # 2. Dodaj poniższe linie:
+      #   "intel_idle.max_cstate=10"
+      #   "processor.max_cstate=10"
+      #   "idle=intel" # Wymuś natywny sterownik intel_idle zamiast ACPI fallback
+      # ];
 
       # 4. Unbind NVIDIA
       # This ensures the kernel isn't even looking at the card.
@@ -103,15 +123,16 @@
         wantedBy = [ "multi-user.target" ];
         serviceConfig.Type = "oneshot";
         script = ''
-          # 1. Asus Quiet Mode (Hard-caps CPU TDP to ~15-20W)
+          # 1. Asus Quiet Mode
           ${pkgs.asusctl}/bin/asusctl profile -n Quiet
 
           # 2. Power Profiles Daemon to Power Saver
           ${pkgs.power-profiles-daemon}/bin/powerprofilesctl set power-saver
 
-          # 3. Force Intel Energy Preference to 'power'
-          # This tells the CPU to stay on E-cores as much as possible
-          echo "power" | tee /sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference
+          # 3. Force Intel Energy Preference to 'power' (Fixed loop syntax)
+          for cpu in /sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference; do
+            if [ -f "$cpu" ]; then echo "power" > "$cpu"; fi
+          done
 
           # 4. Turn off Bluetooth and Lights
           ${pkgs.bluez}/bin/bluetoothctl power off
@@ -132,6 +153,11 @@
         "NV_REG_ENABLE_USERSPACE_MODESET=1"
         "nvidia_drm.vrr_enabled=1"
       ];
+
+      hardware.nvidia-container-toolkit = {
+        enable = true;
+        suppressNvidiaDriverAssertion = true; # To natychmiast uciszy ten błąd
+      };
 
       hardware.nvidia = {
         # PREVENTS CRASHES when Intel is disconnected

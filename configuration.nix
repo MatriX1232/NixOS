@@ -26,7 +26,8 @@
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   boot.loader.systemd-boot.configurationLimit = 10;
-  boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-x86_64-v3;
+  # boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest-x86_64-v3;
+  boot.kernelPackages = pkgs.linuxPackages_latest;
 
   boot.kernel.sysctl = {
     "vm.max_map_count" = 2147483642;
@@ -71,7 +72,7 @@
 
   nix.settings = {
     substituters = [
-      "https://attic.xuyh0120.win/lantian"
+      # "https://attic.xuyh0120.win/lantian"
       "https://cache.garnix.io"
       "https://cache.nixos-cuda.org"
     ];
@@ -109,6 +110,7 @@
 
   nixpkgs.config.permittedInsecurePackages = [
     "electron-39.8.10"
+    "pnpm-9.15.9"
   ];
 
   # Desktop Environment
@@ -137,6 +139,8 @@
       noto-fonts-cjk-sans
       noto-fonts-color-emoji
       font-awesome
+      maple-mono.truetype
+      maple-mono.NF-unhinted
     ];
     fontconfig = {
       antialias = true;
